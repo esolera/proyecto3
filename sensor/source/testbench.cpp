@@ -1,29 +1,4 @@
-//----------------------------------------------------------------------
-//   Copyright 2010-2014 Fraunhofer IIS/EAS
-//   Copyright 2014 NXP B.V.
-//   Copyright 2014 Université Pierre et Marie Curie
-//   All Rights Reserved
-//
-//   Licensed under the Apache License, Version 2.0 (the
-//   "License"); you may not use this file except in
-//   compliance with the License.  You may obtain a copy of
-//   the License at
-//
-//       http://www.apache.org/licenses/LICENSE-2.0
-//
-//   Unless required by applicable law or agreed to in
-//   writing, software distributed under the License is
-//   distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-//   CONDITIONS OF ANY KIND, either express or implied.  See
-//   the License for the specific language governing
-//   permissions and limitations under the License.
-//----------------------------------------------------------------------
-//
-//   Original Author: Karsten Einwich Fraunhofer IIS/EAS Dresden
-//
-//   Created on: 16.02.2010
-//
-//----------------------------------------------------------------------
+
 #include <systemc-ams>
 #include "escalador.h"
 #include "sin_source.h"
@@ -31,6 +6,10 @@
 #include "escalador2.h"
 #include "adc.h"
 #include "convertidor_centigrados.h"
+#include "kelvin.h"
+#include "faren.h"
+#include "alarma.h"
+#include "display.h"
 int sc_main(int argn, char* argc[])          // SystemC main program
 {
  sca_tdf::sca_signal<double> sigInput; //Cable entrada
@@ -39,7 +18,11 @@ int sc_main(int argn, char* argc[])          // SystemC main program
  sca_tdf::sca_signal<double> sigOutput; //Cable salidas
  sca_tdf::sca_signal< sc_int<NBitsADC> > sigOutputADC;
  sca_tdf::sca_signal< sc_int<NBitsADC> > centigrad;
-//sc_core::sc_signal<sc_int<NBitsADC>	 >
+ sca_tdf::sca_signal< sc_int<NBitsADC> > kelvins;
+ sca_tdf::sca_signal< sc_int<NBitsADC> > fareni;
+ sca_tdf::sca_signal< bool > centi_alarm;
+
+
  sin_source fuente("fuente");
     fuente.out(sigInput);
 
@@ -63,6 +46,23 @@ int sc_main(int argn, char* argc[])          // SystemC main program
  	cel1.in(sigOutputADC);
  	cel1.out(centigrad);
 
+ kelvin kelvin("kelvins");
+ 	kelvin.in(sigOutputADC);
+ 	kelvin.out(kelvins);
+
+ faren faren("faren");
+ 	faren.in(sigOutputADC);
+ 	faren.out(fareni);
+
+alarma alarma("alarma");
+	alarma.in(centigrad);
+	alarma.alert(centi_alarm);
+
+display display("display");
+	display.in_centi(centigrad);
+	display.in_kelvin(kelvins);
+	display.in_fare(fareni);
+
 
 
 
@@ -73,9 +73,13 @@ int sc_main(int argn, char* argc[])          // SystemC main program
  	sca_trace(tdf, sigOutput, "sigOutput");
  	sca_trace(tdf, sigOutputADC, "sigOutputADC");
  	sca_trace(tdf, centigrad, "centigrad");
+ 	sca_trace(tdf, kelvins, "kelvins");
+ 	sca_trace(tdf, fareni, "fareni");
+ 	sca_trace(tdf, centi_alarm, "centi_alarm");
 
  	sc_start(5000,SC_US);
  	sca_close_tabular_trace_file(tdf);
+
 
  	return 0; 
 

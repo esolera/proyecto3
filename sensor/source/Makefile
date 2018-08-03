@@ -9,6 +9,10 @@ MAIN3=integrador.cpp
 MAIN4=escalador2.cpp
 MAIN5=adc.cpp
 MAIN6=convertidor_centigrados.cpp
+MAIN7=kelvin.cpp
+MAIN8=faren.cpp
+MAIN9=alarma.cpp
+MAIN10=display.cpp
 TB=testbench.cpp
 
 COMP=sin_source.o
@@ -17,6 +21,10 @@ COMP3=integrador.o
 COMP4=escalador2.o
 COMP5=adc.o
 COMP6=convertidor_centigrados.o
+COMP7=kelvin.o
+COMP8=faren.o
+COMP9=alarma.o
+COMP10=display.o
 
 COMP_TB=testbench.o
 EXE=sin_source_tb.exe
@@ -39,6 +47,14 @@ all:
 	${LINK} ${COMP5}
 	${CXX} -c ${MAIN6} ${INC} 
 	${LINK} ${COMP6}
+	${CXX} -c ${MAIN7} ${INC} 
+	${LINK} ${COMP7}
+	${CXX} -c ${MAIN8} ${INC} 
+	${LINK} ${COMP8}
+	${CXX} -c ${MAIN9} ${INC} 
+	${LINK} ${COMP9}
+	${CXX} -c ${MAIN10} ${INC} 
+	${LINK} ${COMP10}
 	${CXX} -c ${TB} ${INC}
 	${CXX} ${COMP_TB} ${LIBDIR} ${LIBS}
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/systemc-ams-2.1/lib-linux64
