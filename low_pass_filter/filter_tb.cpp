@@ -10,13 +10,8 @@ int sc_main (int argc, char* argv[]){
 
 	sca_eln::sca_node_ref gnd;
 
-<<<<<<< HEAD
-	sca_eln::sca_vsource src("src",0.0, 0.0, 3.3, 1e9);
-	src.set_timestep(1e-2, sc_core::SC_US);
-=======
-	sca_eln::sca_vsource src("src",0.0, 0.0, 3.3, 1e8);
+	sca_eln::sca_vsource src("src",0.0, 0.0, 3.3, 10e3);
 	src.set_timestep(1e-4, sc_core::SC_US);
->>>>>>> 48102950a493adaad6f876777f0939fd7fea7a94
 
 	src.p(in);
 	src.n(gnd);
@@ -31,7 +26,7 @@ int sc_main (int argc, char* argv[]){
 	sca_trace(eln, out, "Output_Analog");
 
 	//eln->disable();
-	sc_start(1e-2, sc_core::SC_MS);
+	sc_start(1e-1, sc_core::SC_MS);
 	//eln->enable();
 
 	//sca_ac_start(1e3,1e9,1000,sca_ac_analysis::SCA_LOG);
